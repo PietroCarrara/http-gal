@@ -8,7 +8,17 @@ module.exports = class ImageRepository {
      * @param {string} name The image filename
      * @returns {Promise<Image>}
      */
-    get(name) {
+    getByName(name) {
+
+    }
+
+    /**
+     * Gets the images associated with a given book
+     *
+     * @param {*} book The book
+     * @return {Promise<Image[]>}
+     */
+    getByBook(book) {
 
     }
 }
