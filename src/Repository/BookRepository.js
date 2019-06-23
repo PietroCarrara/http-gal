@@ -1,3 +1,10 @@
+const fs = require('fs');
+const util = require('util');
+
+const Book = require('../Model/Book');
+
+const readdir = util.promisify(fs.readdir);
+
 module.exports = class BookRepository {
 
     /**
@@ -6,7 +13,11 @@ module.exports = class BookRepository {
      * @param {string} name The book name
      * @return {Promise<Book>}
      */
-    getByName(name) {
-        
+    async getByName(name) {
+        var contents = await readdir(name);
+
+        return new Book(name, contents);
+
+        return dir;
     }
 }
