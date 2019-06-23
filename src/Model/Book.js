@@ -10,12 +10,13 @@ module.exports = class Book {
         this.id = id;
 
         this.images = [];
+        this.subBooks = [];
     }
 
     /**
      * Loads the images associated with this book
      *
-     * @returns {Book} this
+     * @returns {Promise<Book>} this
      */
     async withImages() {
         if (this.images.count <= 0) {
@@ -23,6 +24,16 @@ module.exports = class Book {
 
             this.images = await imageRepo.getByBook(this);
         }
+
+        return this;
+    }
+
+    /**
+     * Loads the subbooks associated with this book
+     *
+     * @returns {Promise<Book>} this
+     */
+    async withSubBooks() {
 
         return this;
     }
