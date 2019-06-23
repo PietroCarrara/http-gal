@@ -1,4 +1,10 @@
+const fs = require('fs');
+const util = require('util');
+
 const Image = require('../Model/Image');
+const Book = require('../Model/Book');
+
+const readFile = util.promisify(fs.readFile);
 
 module.exports = class ImageRepository {
     
@@ -8,17 +14,51 @@ module.exports = class ImageRepository {
      * @param {string} name The image filename
      * @returns {Promise<Image>}
      */
-    getByName(name) {
+    async getByName(name) {
+        var data = await readFile(name);
 
+        return new Image(data);
     }
 
     /**
      * Gets the images associated with a given book
      *
-     * @param {*} book The book
+     * @param {Book} book The book
      * @return {Promise<Image[]>}
      */
     getByBook(book) {
+        var id = book.getId();
+        var contents = book.getContents();
 
+        const exts = [
+            'jpg',
+            'jpeg',
+            'png',
+            'gif',
+            'webp',
+        ];
+
+        /**
+         * @param {string} str
+         * @return {bool} True when the string is a valid image
+         */
+        const strIsImage = str => {
+            for (var ext of exts) {
+                if (str.endsWith(ext)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        var images = [];
+
+        for (var file of contents) {
+            if (strIsImage(file)) {
+                images.push(this.getByName(id + file));
+            }
+        }
+
+        return Promise.all(images);
     }
 }
