@@ -16,9 +16,9 @@ module.exports = class Image {
     /**
      * Resizes the image
      *
-     * @param {*} width
-     * @param {*} height
-     * @returns Image
+     * @param {number} width
+     * @param {number} height
+     * @return {Image}
      */
     resizeFilter(width, height) {
 
@@ -28,9 +28,9 @@ module.exports = class Image {
     /**
      * Resizes the image to fit in a box (respects aspect)
      *
-     * @param {*} maxWidth
-     * @param {*} maxHeight
-     * @return Image
+     * @param {number} maxWidth
+     * @param {number} maxHeight
+     * @return {Image}
      */
     resizeBoxFilter(maxWidth, maxHeight) {
 
@@ -40,7 +40,7 @@ module.exports = class Image {
     /**
      * Sets the image to be rendered as a jpeg
      *
-     * @returns Image
+     * @return {Image}
      */
     jpegFilter() {
         
@@ -50,7 +50,7 @@ module.exports = class Image {
     /**
      * Renders the image using all filters
      *
-     * @returns Stream
+     * @return {Stream}
      */
     render() {
 
