@@ -17,7 +17,5 @@ module.exports = class BookRepository {
         var contents = await readdir(name);
 
         return new Book(name, contents);
-
-        return dir;
     }
 }

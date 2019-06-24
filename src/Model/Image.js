@@ -1,14 +1,16 @@
+const Sharp = require('sharp');
+
 module.exports = class Image {
-    
+
     /**
      * Creates an instance of Image.
-     * @param {*} data Image data
+     * @param {Buffer} data Image data
      */
     constructor(data) {
         // Filters will be added and used later
         // when rendering the image
         this.filters = [];
-    
+
         // The original data
         this.data = data;
     }
@@ -43,17 +45,28 @@ module.exports = class Image {
      * @return {Image}
      */
     jpegFilter() {
-        
+
+        /**
+         * @param {Sharp.Sharp} sharp
+         */
+        this.filters['format'] = (sharp) => sharp.jpeg();
+
         return this;
     }
 
     /**
      * Renders the image using all filters
      *
-     * @return {Stream}
+     * @return {Promise<Buffer>}
      */
-    render() {
+    async render() {
+        var sharp = Sharp(this.data);
 
+        for (var filter of this.filters) {
+            sharp = filter.apply(sharp);
+        }
+
+        return sharp.toBuffer();
     }
 
     /**

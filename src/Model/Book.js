@@ -1,4 +1,5 @@
 const ImageRepository = require('../Repository/ImageRepository');
+const Image = require('./Image');
 
 module.exports = class Book {
 
