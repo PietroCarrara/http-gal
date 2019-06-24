@@ -1,3 +1,6 @@
+const BookRepository = require('./Repository/BookRepository');
+const ImageRepository = require('./Repository/ImageRepository');
+
 const express = require('express');
 
 var baseDir = process.argv[2] || process.cwd();
@@ -7,16 +10,13 @@ if (!baseDir.endsWith('/')) {
 
 var app = express();
 
-const BookRepository = require('./Repository/BookRepository');
-
 var bookRepo = new BookRepository();
 
 app.get('/book', async (req, res) => {
 
     var name = req.query.book;
 
-    var book = await bookRepo.getByName(baseDir + name)
-    await book.withImages();
+    var book = await bookRepo.withImages().getByName(baseDir + name)
 
     var cover = book.getImages()[0];
 

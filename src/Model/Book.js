@@ -1,6 +1,3 @@
-const ImageRepository = require('../Repository/ImageRepository');
-const Image = require('./Image');
-
 module.exports = class Book {
 
     /**
@@ -17,11 +14,23 @@ module.exports = class Book {
         this.subBooks = [];
     }
 
+    getSubBooks() {
+        return this.subBooks;
+    }
+
+    setSubBooks(subBooks) {
+        this.subBooks = subBooks;
+    }
+
     /**
      * @return {Image[]}
      */
     getImages() {
         return this.images;
+    }
+
+    setImages(images) {
+        this.images = images;
     }
     
     /**
@@ -36,30 +45,5 @@ module.exports = class Book {
      */
     getContents() {
         return this.contents;
-    }
-
-    /**
-     * Loads the images associated with this book
-     *
-     * @returns {Promise<Book>} this
-     */
-    async withImages() {
-        if (this.images.length <= 0) {
-            var imageRepo = new ImageRepository();
-
-            this.images = await imageRepo.getByBook(this);
-        }
-
-        return this;
-    }
-
-    /**
-     * Loads the subbooks associated with this book
-     *
-     * @returns {Promise<Book>} this
-     */
-    async withSubBooks() {
-
-        return this;
     }
 }

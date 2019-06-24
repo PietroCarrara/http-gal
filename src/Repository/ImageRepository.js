@@ -2,10 +2,11 @@ const fs = require('fs');
 const util = require('util');
 const Image = require('../Model/Image');
 const Book = require('../Model/Book');
+const Repository = require('./Repository');
 
 const readFile = util.promisify(fs.readFile);
 
-module.exports = class ImageRepository {
+module.exports = class ImageRepository extends Repository {
     
     /**
      * Returns a promise that will receive a image by its name
@@ -26,7 +27,6 @@ module.exports = class ImageRepository {
      * @return {Promise<Image[]>}
      */
     getByBook(book) {
-        var id = book.getId();
         var contents = book.getContents();
 
         const exts = [
@@ -54,7 +54,7 @@ module.exports = class ImageRepository {
 
         for (var file of contents) {
             if (strIsImage(file)) {
-                images.push(this.getByName(id + file));
+                images.push(this.getByName(file));
             }
         }
 
