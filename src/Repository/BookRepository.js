@@ -38,9 +38,6 @@ module.exports = class BookRepository extends Repository {
      * @return {Book[]}
      */
     async getAll(dir) {
-        if (!dir.endsWith('/')) {
-            dir += '/';
-        }
 
         var root = await this.withSubBooks().getByName(dir);
 

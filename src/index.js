@@ -1,5 +1,6 @@
 const BookRepository = require('./Repository/BookRepository');
 const ImageRepository = require('./Repository/ImageRepository');
+const View = require('./View/View');
 
 const express = require('express');
 
@@ -11,17 +12,33 @@ if (!baseDir.endsWith('/')) {
 var app = express();
 
 var bookRepo = new BookRepository();
+var imageRepo = new ImageRepository();
+
+var view = new View();
+
+app.get('/', async (req, res) => {
+    var v = view.render('book.html', await bookRepo.withSubBooks().getByName(baseDir));
+
+    res.send(v);
+})
 
 app.get('/book', async (req, res) => {
 
     var name = req.query.book;
 
-    var book = await bookRepo.withImages().getByName(baseDir + name)
+    var book = await bookRepo.withSubBooks().withImages().getByName(name)
 
-    var cover = book.getImages()[0];
+    var v = view.render('book.html', book);
+    res.send(v);
+});
 
-    res.setHeader('Content-type', 'image/jpeg');
-    res.send(await cover.jpegFilter().render());
+app.get('/image', async (req, res) => {
+    var id = req.query.id;
+
+    var img = await imageRepo.getByName(id);
+
+    res.header('Content-type', 'image/jpeg');
+    res.send(await img.jpegFilter().render());
 });
 
 app.listen(8000);

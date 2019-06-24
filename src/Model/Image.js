@@ -4,17 +4,31 @@ module.exports = class Image {
 
     /**
      * Creates an instance of Image.
-     * @param {Buffer} data Image data
+     * @param {string} id This image's id
      */
-    constructor(data) {
+    constructor(id) {
+        this.id = id;
+        
         // Filters will be added and used later
         // when rendering the image
         this.filters = [];
 
-        // The original data
-        this.data = data;
+        // The image data
+        this.data = null;
+
+        // This function must be overwritten to something that sets this.data
+        // with a buffer containing the image's bytes 
+        this.loadData = () => {
+            throw `Image ${this.id} doesn't know how to load itself!`;
+        }
     }
 
+    getUrl() {
+        var id = encodeURIComponent(this.id);
+        
+        return `/image/?id=${id}`;
+    }
+    
     /**
      * Resizes the image
      *
@@ -60,18 +74,24 @@ module.exports = class Image {
      * @return {Promise<Buffer>}
      */
     async render() {
+
+        if (this.data == null) {
+            await this.loadData();
+        }
+
         var sharp = Sharp(this.data);
 
         for (var filter of this.filters) {
             sharp = filter.apply(sharp);
         }
 
+        this.clearFilters();
+
         return sharp.toBuffer();
     }
 
     /**
      * Clears the filters
-     *
      */
     clearFilters() {
         this.filters = [];

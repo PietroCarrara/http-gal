@@ -15,9 +15,12 @@ module.exports = class ImageRepository extends Repository {
      * @returns {Promise<Image>}
      */
     async getByName(name) {
-        var data = await readFile(name);
+        var img = new Image(name);
+        img.loadData = async () => {
+            img.data = await readFile(name);
+        }
 
-        return new Image(data);
+        return img;
     }
 
     /**
@@ -26,7 +29,7 @@ module.exports = class ImageRepository extends Repository {
      * @param {Book} book The book
      * @return {Promise<Image[]>}
      */
-    getByBook(book) {
+    async getByBook(book) {
         var contents = book.getContents();
 
         const exts = [
