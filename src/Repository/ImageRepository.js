@@ -46,7 +46,7 @@ module.exports = class ImageRepository extends Repository {
          */
         const strIsImage = str => {
             for (var ext of exts) {
-                if (str.endsWith(ext)) {
+                if (str.toLowerCase().endsWith(ext)) {
                     return true;
                 }
             }

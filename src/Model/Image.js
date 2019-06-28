@@ -50,6 +50,13 @@ module.exports = class Image {
      */
     resizeBoxFilter(maxWidth, maxHeight) {
 
+        /**
+         * @param {Sharp.Sharp} sharp
+         */
+        this.filters['resize'] = (sharp) => sharp.resize(maxWidth, maxHeight, {
+            fit: 'inside'
+        });
+
         return this;
     }
 
@@ -81,8 +88,8 @@ module.exports = class Image {
 
         var sharp = Sharp(this.data);
 
-        for (var filter of this.filters) {
-            sharp = filter.apply(sharp);
+        for (var filter in this.filters) {
+            sharp = this.filters[filter](sharp);
         }
 
         this.clearFilters();
