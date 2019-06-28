@@ -21,6 +21,10 @@ module.exports = class View {
      * @param {*} data The data
      */
     render(templ, data = {}) {
-        return mustache.render(this.views[templ], data, this.views);
+        var tpl = mustache.render(this.views[templ], data, this.views);
+
+        return mustache.render(this.views['base.html'], {
+            content: tpl,
+        });
     }
 }
